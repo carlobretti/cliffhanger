@@ -1,0 +1,44 @@
+general:
+  seed: 42
+  model_name: "trailerness_transformer"
+  
+datamodule:
+  as_shots: True
+  as_semantic: True
+  ground_truth: "only_preview"
+  test_split_ratio: 0.2
+  split_seed: 42
+  window_size: 64
+  batch_size: 1
+  num_workers: 10
+
+# kfold:
+#   num_folds: 5
+
+trainer:
+  max_epochs: 50
+  num_sanity_val_steps: 0
+  devices: 1
+  accelerator: "gpu"
+  log_every_n_steps: 1
+  gradient_clip_val: 5
+  early_stopping: False
+  early_stopping_monitor: "val/loss"
+  early_stopping_mode: "min"
+  early_stopping_patience: 10
+  early_stopping_min_delta: 0.0
+  model_checkpoint_save_weights_only: True
+  model_checkpoint_mode: "max"
+  model_checkpoint_monitor: "val/frame_f1"
+
+module:
+  model_dim: 64
+  num_heads: 4
+  num_layers: 1
+  num_classes: 1
+  dropout: 0.5
+  input_dropout: 0.2
+  lr: 5e-4
+  warmup: 100
+  focal_alpha: 0.95
+  focal_gamma: 1
