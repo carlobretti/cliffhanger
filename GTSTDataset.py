@@ -1,4 +1,4 @@
-# %%
+
 import os
 from fileinput import filename
 from typing import Callable, Optional
@@ -13,7 +13,7 @@ from torchvision.datasets.vision import VisionDataset
 # build GTST dataset. using binary annotations
 
 
-# %%
+
 class GTST(Dataset):
     def __init__(
         self,

@@ -1,4 +1,3 @@
-# %%
 import json
 import time
 from collections import defaultdict
@@ -13,7 +12,6 @@ import wandb
 from torchmetrics import Accuracy, F1Score, Precision, Recall
 from tqdm import tqdm
 
-# %%
 
 api = wandb.Api()
 
@@ -25,9 +23,9 @@ for model_name in ["trailerness_transformer"]:
 
     for seed in seeds:
         # Project is specified by <entity/project-name>
-        # raise ValueError("change this to your WandB entity/project-name")
+        raise ValueError("change this to your WandB entity/project-name")
         runs = api.runs(
-            "carlobretti/trailerness", ## change this to your WandB entity/project-name
+            "XXXXXXX/trailerness", ## change this to your WandB entity/project-name. project-name is specified in base_run.py
             filters={
                 "config.general.model_name": model_name,
                 # "config.trainer.model_checkpoint_monitor": "val/frame_f1",
@@ -46,15 +44,13 @@ for model_name in ["trailerness_transformer"]:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         window_size = 64
 
-        ## %%
-        # threshold 0.5 here since here i'm using the already-sigmoided preds
+        #        # threshold 0.5 here since here i'm using the already-sigmoided preds
         f1_module = F1Score(task="binary", threshold=0.5).to(device)
         recall_module = Recall(task="binary", threshold=0.5).to(device)
         precision_module = Precision(task="binary", threshold=0.5).to(device)
         accuracy_module = Accuracy(task="binary", threshold=0.5).to(device)
 
-        ## %%
-        runs_ls = []
+        #        runs_ls = []
         for run in tqdm(runs):
             configs = (
                 json.dumps(run.config["general"], sort_keys=True)
@@ -78,7 +74,7 @@ for model_name in ["trailerness_transformer"]:
             )
         runs_df = pd.DataFrame(runs_ls)
 
-        # #%%
+        
 
         possible_combos = {
             "only visual, only clips": [[0, 0]],
@@ -102,7 +98,7 @@ for model_name in ["trailerness_transformer"]:
                 [1, 1],
             ],
         }
-        # #%%
+        #
         # pick best 4 runs across the different scales and modalities based on the val frame level f1
         # for the different models
 
@@ -121,7 +117,7 @@ for model_name in ["trailerness_transformer"]:
                     # best_run_per_stream[k] = runs_df['id'].iloc[id]
 
         # best_runs = [runs_ls[i] for i in best_runs_idx]
-        # #%%
+        #
 
         results = []
         frame_level_annotations = {}
